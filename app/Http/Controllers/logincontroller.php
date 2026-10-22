@@ -36,42 +36,25 @@ class logincontroller extends Controller
         }
     }
 
-    public function home(Request $Request){
-        if (session('u')){
-            $filters = $Request->validate([
-                'from' => [
-                    'nullable',
-                    'date_format:Y-m-d',
-                    'required_with:to',
-                    'before_or_equal:to',
-                ],
-                'to' => [
-                    'nullable',
-                    'date_format:Y-m-d',
-                    'required_with:from',
-                    'after_or_equal:from',
-                ],
-            ]);
+    public function home(Request $request)
+{
+    if (session('u')) {
+        $from = $request->input('from');
+        $to = $request->input('to');
 
-            $from = $filters['from'] ?? null;
-            $to = $filters['to'] ?? null;
+        $jalur = new database;
+        $hello['data'] = $jalur->tampilTanggal('user', $from, $to);
+        
+        $hello['filters'] = [
+            'from' => $from,
+            'to' => $to
+        ];
 
-            if ($from && $to && $to < $from) {
-                return redirect('/home')
-                    ->withErrors(['to' => 'Sampai tanggal harus setelah atau sama dengan Dari tanggal.'])
-                    ->withInput();
-            }
-
-            $jalur = new database;
-            $hello['data'] = $jalur->tampilTanggal('user', $from, $to);
-            $hello['filters'] = $filters;
-
-            return view('home', $hello);
-        }
-        else{
-            return redirect()->intended('/');
-        }
+        return view('home', $hello);
+    } else {
+        return redirect()->intended('/');
     }
+}
 
     public function exportUsersExcel(Request $Request)
     {
@@ -105,44 +88,23 @@ class logincontroller extends Controller
             ->header('Content-Disposition', 'inline; filename="data-user.pdf"');
     }
 
-    private function filteredUsers(Request $request): Collection
-    {
-        $filters = $request->validate([
-            'from' => [
-                'nullable',
-                'date_format:Y-m-d',
-                'required_with:to',
-                'before_or_equal:to',
-            ],
-            'to' => [
-                'nullable',
-                'date_format:Y-m-d',
-                'required_with:from',
-                'after_or_equal:from',
-            ],
-        ]);
+  private function filteredUsers(Request $request)
+{
+    $query = DB::table('user')
+        ->select('id_user', 'username', 'email', 'level', 'created_at')
+        ->orderBy('created_at')
+        ->orderBy('id_user');
 
-        $query = DB::table('user')
-            ->select('id_user', 'username', 'email', 'level', 'created_at')
-            ->orderBy('created_at')
-            ->orderBy('id_user');
-
-        if (!empty($filters['from'])) {
-            $query->whereDate('created_at', '>=', $filters['from']);
-        }
-
-        if (!empty($filters['to'])) {
-            $query->whereDate('created_at', '<=', $filters['to']);
-        }
-
-        return $query->get()->map(function (object $user): object {
-            $user->created_at = $user->created_at
-                ? Carbon::parse($user->created_at)->format('d/m/Y')
-                : '-';
-
-            return $user;
-        });
+    if ($request->filled('from')) {
+        $query->whereDate('created_at', '>=', $request->from);
     }
+
+    if ($request->filled('to')) {
+        $query->whereDate('created_at', '<=', $request->to);
+    }
+
+    return $query->get();
+}
 
     public function logout(){
         session()->flush();

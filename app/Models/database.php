@@ -49,4 +49,6 @@ class database extends Model
     {
         return DB::table($table)->where($where)->first();
     }
+
+   
 }
