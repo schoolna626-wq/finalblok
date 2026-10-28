@@ -66,7 +66,7 @@
         ?>
     </select><br>
 
-    <button type="submit">Simpan</button>
+    <button type="submit" class="btn btn-warning">Simpan</button>
 </form>
 
 </body>

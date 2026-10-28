@@ -20,7 +20,7 @@
     No HP:
     <input type="text" name="no_hp" required><br>
 
-    <button type="submit">Simpan</button>
+    <button type="submit" class="btn btn-warning">Simpan</button>
 
 </form>
 

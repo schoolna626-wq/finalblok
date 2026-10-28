@@ -15,21 +15,6 @@ class database extends Model
         ->get();
     }
 
-    public function tampilTanggal($table, $from, $to)
-    {
-        $query = DB::table($table);
-
-        if ($from) {
-            $query->whereDate('created_at', '>=', $from);
-        }
-
-        if ($to) {
-            $query->whereDate('created_at', '<=', $to);
-        }
-
-        return $query->get();
-    }
-
     public function tambah($table, $data)
     {
         return DB::table($table)->insert($data);
@@ -48,6 +33,15 @@ class database extends Model
     public function tarik($table, $where)
     {
         return DB::table($table)->where($where)->first();
+    }
+
+    public function joins()
+    {
+        return DB::table('karyawan')
+            ->join('user', 'karyawan.id_user', '=', 'user.id_user')
+            ->join('jabatan', 'karyawan.id_jabatan', '=', 'jabatan.id_jabatan')
+            ->join('agama', 'karyawan.id_agama', '=', 'agama.id_agama')
+            ->get();
     }
 
    

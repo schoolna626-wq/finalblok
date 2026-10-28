@@ -27,8 +27,8 @@
             <td><?= $no++ ?></td>
             <td><?= $value->nama_kry ?></td>
             <td><?= $value->alamat_kry ?></td>
-            <td><?= $value->id_jabatan ?></td>
-            <td><?= $value->id_agama ?></td>
+            <td><?= $value->nama_jabatan ?></td>
+            <td><?= $value->nama_agama ?></td>
             
         </tr>
         <?php

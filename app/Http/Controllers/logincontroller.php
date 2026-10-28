@@ -36,25 +36,16 @@ class logincontroller extends Controller
         }
     }
 
-    public function home(Request $request)
-{
-    if (session('u')) {
-        $from = $request->input('from');
-        $to = $request->input('to');
-
-        $jalur = new database;
-        $hello['data'] = $jalur->tampilTanggal('user', $from, $to);
-        
-        $hello['filters'] = [
-            'from' => $from,
-            'to' => $to
-        ];
-
-        return view('home', $hello);
-    } else {
-        return redirect()->intended('/');
+    public function home(Request $Request){
+        if (session('u')){
+            $jalur = new database;
+            $hello['data'] = $jalur->tampil('user');
+            return view('home', $hello);
+        }
+        else{
+            return redirect()->intended('/');
+        }
     }
-}
 
     public function exportUsersExcel(Request $Request)
     {
@@ -88,23 +79,13 @@ class logincontroller extends Controller
             ->header('Content-Disposition', 'inline; filename="data-user.pdf"');
     }
 
-  private function filteredUsers(Request $request)
-{
-    $query = DB::table('user')
-        ->select('id_user', 'username', 'email', 'level', 'created_at')
-        ->orderBy('created_at')
-        ->orderBy('id_user');
-
-    if ($request->filled('from')) {
-        $query->whereDate('created_at', '>=', $request->from);
+    private function filteredUsers(Request $request)
+    {
+        return DB::table('user')
+            ->select('id_user', 'username', 'email', 'level')
+            ->orderBy('id_user')
+            ->get();
     }
-
-    if ($request->filled('to')) {
-        $query->whereDate('created_at', '<=', $request->to);
-    }
-
-    return $query->get();
-}
 
     public function logout(){
         session()->flush();
@@ -123,9 +104,7 @@ public function zano(Request $Request)
     'username' => $us,
     'password' => $ps,
     'email' => $em,
-    'level' => 'pelanggan',
-    'created_at' => now(),
-    'updated_at' => now()
+    'level' => 'pelanggan'
     );
 
     $jalur = new database;
@@ -157,7 +136,6 @@ public function zano(Request $Request)
         ]);
 
         $jalur = new database;
-        $data['updated_at'] = now();
         $jalur->ubah('user', ['id_user' => $id], $data);
 
         return redirect('/home');
@@ -180,7 +158,7 @@ public function zano(Request $Request)
     {
         $jalur = new database;
 
-        $data['karyawan'] = $jalur->tampil('karyawan');
+        $data['karyawan'] = $jalur->joins();
         $data['jabatan'] = $jalur->tampil('jabatan');
         $data['agama'] = $jalur->tampil('agama');
 
