@@ -29,6 +29,59 @@
         }
     }
     </style>
+    <!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+  <ul class="sidebar-nav" id="sidebar-nav">
+
+    <!-- Menu Dashboard -->
+    <li class="nav-item">
+      <a class="nav-link" href="{{ url('/home') }}">
+        <i class="bi bi-grid"></i>
+        <span>Dashboard</span>
+      </a>
+    </li>
+
+    <li class="nav-heading">Data Master</li>
+
+    <!-- Menu Karyawan -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{{ url('/karyawan') }}">
+        <i class="bi bi-people"></i>
+        <span>Data Karyawan</span>
+      </a>
+    </li>
+
+    <!-- Menu Pelanggan -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{{ url('/pelanggan') }}">
+        <i class="bi bi-person-lines-fill"></i>
+        <span>Data Pelanggan</span>
+      </a>
+    </li>
+
+    <li class="nav-heading">Pengaturan</li>
+
+    <!-- Menu Profile -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{{ url('/profile') }}">
+        <i class="bi bi-person"></i>
+        <span>Profile</span>
+      </a>
+    </li>
+
+    <!-- Menu Logout -->
+    <li class="nav-item">
+      <a class="nav-link collapsed" href="{{ url('/logout') }}">
+        <i class="bi bi-box-arrow-in-right"></i>
+        <span>Logout</span>
+      </a>
+    </li>
+
+  </ul>
+
+</aside><!-- End Sidebar-->
+
         
         <nav class="navbar navbar-dark bg-dark no-print">
         <div class="container-fluid d-flex flex-wrap">
@@ -50,24 +103,7 @@
 <h1 class="no-print">Welcome to the dashboard <?php echo session('u') ?></h1>
 <h1 class="print-title">Data Pengguna</h1>
 
-<div class="d-flex flex-wrap gap-2 mb-3 no-print">
 
-<form class="no-print" action="/tkry" method="GET">
-    <button type="submit" class="btn btn-dark">Tambah Karyawan</button>
-</form>
-
-<form class="no-print" action="/tplg" method="GET">
-    <button type="submit"class="btn btn-primary">Tambah Pelanggan</button>
-</form>
-
-<form class="no-print" action="/pelanggan" method="GET">
-    <button type="submit" class="btn btn-info" >Pelanggan</button>
-</form>
-
-<form class="no-print" action="/karyawan" method="GET">
-    <button type="submit" class="btn btn-success">Karyawan</button>
-</form>
-</div>
 
 <p class="no-print">
     <a href="/users/export/excel">
